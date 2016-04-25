@@ -273,145 +273,57 @@
       
         
           
-            <p>算法来自VLDB2015的文章：<em>Exploiting Vertex Relationships in Speeding up Subgraph Isomorphism over Large Graphs</em>.算法针对一系列的基于回溯（Backtracking）的子图匹配算法提出了有效的优化策略，从文章提供的实验结果来看，这个算法还是很有价值的。<br>首先看一下子图匹配的基本概念：给定数据图$G=(V,E,\sum,L)$和查询图$G_q=(V_q,E_q,\sum_q,L_q)$,这里的四元组的四个属性分别表示图的顶点集，边集，定点的所有可能标签的集合，以及赋予每个顶点标签的函数。<br>注意：</p>
+            <p>算法来自VLDB2015的文章：<em>Exploiting Vertex Relationships in Speeding up Subgraph Isomorphism over Large Graphs</em>.算法针对一系列的基于回溯（Backtracking）的子图匹配算法提出了有效的优化策略，从文章提供的实验结果来看，这个算法还是很有价值的。<br>首先看一下子图匹配的基本概念：给定数据图$G=(V,E,\sum,L)$和查询图$G_q=(V_q,E_q,\sum_q,L_q)$,这里的四元组的四个属性分别表示图的顶点集，边集，顶点的所有可能标签的集合，以及赋予每个顶点标签的函数。<br>注意：</p>
 <ul>
 <li>这里考虑的图都是顶点带标签的，边带标签的情况在有些论文中出现，但是这里不做考虑。</li>
 <li>这里考虑的图都是无向图。</li>
-<li>在一般情况下，我们认为$G_q$在规模上远小于$G$，这是保证某些算法高效性的条件。</li>
+<li>在一般情况下，我们认为<span>$G_q$</span><!-- Has MathJax -->在规模上远小于<span>$G$</span><!-- Has MathJax -->，这是保证某些算法高效性的条件。</li>
 </ul>
 <p>在给定数据图和查询图之后，我们的任务是找到满足条件的所有从查询图顶点集$V_q$到数据图顶点集$V$的单射$f:V_q\rightarrow V$，使得：</p>
 <ol>
 <li>对任意$u\in V_q$，有$L_q(u)=L(f(u))$。</li>
-<li>对任意的一条边$(u_i,u_j)\in E_q$，在$G$中存在边$(f(u_i),f(u_j))\in E$。<br>直观的来说，子图匹配的任务就是在数据图中找到所有的查询图子结构，因此，我们把$f$又叫做一个<em>嵌入(embedding)</em>。<br>###回溯算法的框架<br>子图匹配的算法有很多，如上所述，这里我们研究的是一类具有代表性的算法，称之为基于<em>回溯(backtracking)</em>的算法。这里来了解一下回溯算法的基本框架：<br>首先给出文章中的伪代码：<br><img src="http://static.zybuluo.com/shenyebao/tw4rcboyq1l5jmkrmss8kgyl/example2.png" alt="example2.png-426.4kB"><br>解释一下主要的步骤：</li>
+<li>对任意的一条边$(u_i,u_j)\in E_q$，在<span>$G$</span><!-- Has MathJax -->中存在边$(f(u_i),f(u_j))\in E$。</li>
+</ol>
+<p>直观的来说，子图匹配的任务就是在数据图中找到所有的查询图子结构，因此，我们把$f$又叫做一个<em>嵌入(embedding)</em>。  </p>
+<h3 id="回溯算法的框架"><a href="#回溯算法的框架" class="headerlink" title="回溯算法的框架"></a>回溯算法的框架</h3><p>子图匹配的算法有很多，如上所述，这里我们研究的是一类具有代表性的算法，称之为基于<em>回溯(backtracking)</em>的算法。这里来了解一下回溯算法的基本框架：<br>首先给出文章中的伪代码：<br><img src="http://static.zybuluo.com/shenyebao/tw4rcboyq1l5jmkrmss8kgyl/example2.png" alt="example2.png-426.4kB"><br>解释一下主要的步骤：</p>
+<ol>
 <li>初始化嵌入$f$为空。</li>
 <li>对于查询图中的每个顶点$u$,建立其候选匹配集$C(u)\in V$。这里$C(u)$表示的是所有可能与$u$匹配的顶点集合，即存在$f$，满足$f(u)=v$的顶点$v$的集合。一个最简单的想法是可以把$C(u)$设为$V$中标签与$u$相同的顶点集合。如果存在一个$C(u)$为空，则算法结束，没有满足条件的匹配结果。</li>
-<li>给定查询图顶点的匹配顺序，例如，按顶点序号从小到大进行按序匹配，执行子过程$subgraphSearch(G_q,G,f)$。<br>子过程$subgraphSearch$是算法的主要部分，主要思想是按顺序逐个尝试匹配查询图的顶点，直到得到一个完整的嵌入$f$，或者中途在匹配某个顶点时发现没有可供匹配的数据图顶点，回溯。主要步骤讲解如下：  </li>
+<li>给定查询图顶点的匹配顺序，例如，按顶点序号从小到大进行按序匹配，执行子过程$subgraphSearch(G_q,G,f)$。</li>
+</ol>
+<p>子过程$subgraphSearch$是算法的主要部分，主要思想是按顺序逐个尝试匹配查询图的顶点，直到得到一个完整的嵌入$f$，或者中途在匹配某个顶点时发现没有可供匹配的数据图顶点，回溯。主要步骤讲解如下：  </p>
+<ol>
 <li>如果$|f|=|V_q|$，则得到一个解，输出$f$。</li>
 <li>否则选择查询图中下一个待匹配的顶点$u$，执行子程序$refineCandidates(f,u,C(u))$去掉$C(u)$中不满足匹配条件的顶点。</li>
-<li>对$C(u)$中的每个剩下的顶点$v$，对$u$能否匹配$v$进行最后一次判断:$isJoinable(f,v,G,G_q)$，如果可以，则将$(u,v)$加入$f$中，执行子过程$subgraphSearch(G_q,G,f)$。<br>这里需要注意的是对于候选匹配集的进一步筛选的子过程$refineCandidate$，显然，这个筛选越彻底，筛掉的顶点越多，算法的效率就越高。从这个子过程的参数可以看到，这里的筛选基于当前的部分嵌入结果$f$。大部分基于回溯的算法的剪枝技巧就在这里体现了。例如经典的<em>VF2算法</em>根据$f$考虑$G$中当前已匹配顶点的所有一跳邻居的集合$T$以及$G_q$中当前已匹配顶点的所有一跳邻居集合$T_q$，算法指出$u$能够匹配$v$的一个必要条件是$u$在$T_q$中的邻居顶点数必然不大于$v$在$T$中的邻居顶点数，从而对$C(u)$进行进一步的筛选。<br>给出基于回溯的子图匹配算法的一般框架之后，文章讨论了对于该类算法的优化策略。主要提出了利用数据图中顶点的四类关系来实现优化。下面就详细介绍这四类关系。<br>###1.Syntactic Containment：句法包含关系<br>给定数据图$G$，我们说图中顶点$v_i$句法包含$v_j$，当且仅当式子$N(v_j)-v_i\subseteq N(v_i)-v_j$成立。记为$v_i\succeq v_j$。直观上来讲，句法包含的意义就是邻居顶点的相互包含关系，当然，在两个顶点相邻时，为了仍然可以定义句法包含关系，我们需要将这两个顶点从对方的邻居顶点中除去。<br>很容易证明句法包含关系是满足传递性的，即我们有:$v_i\succeq v_j, v_j\succeq v_k \Rightarrow v_i\succeq v_k$。<br>句法包含关系的意义在于在已知$v_i\succeq v_j$的情况下，在任意的嵌入$f$中，如果$v_j$被匹配给顶点$u$，而$v_i$并没有被匹配为任何顶点，则我们可以将$v_i$匹配给$u$而得到一个新的嵌入$f^{‘}$。换言之，如果$v_j$能匹配给$u$，那么$v_i$也必然能够匹配给$u$，再换言之，如果$v_i$不能匹配给$u$，那么$v_j$也必然不能匹配给$u$。在下文中，为简单起见，我们把句法包含关系简写为SC关系。句法包含关系就讲到这里。<br>###2.Syntactic Equivalence:句法等同关系<br>根据句法等同字面上的意思以及上文句法包含关系的定义，我们很容易可以得到句法等同关系的定义：同样的，它是定义在数据图$G$上的二元关系，只要把上文中的$\subseteq$替换为$=$即可。我们把它记为$v_i\simeq v_j$。显然，句法等同关系是一种更为严格的句法包含关系，因而它必然满足上文所述的句法包含关系满足的一些特性。值得一提的是，句法等同关系同时满足自反、对称和传递性，是一种等价关系，因而可以在顶点集$V$上构造等价类。下文中的超图就是根据这一特性建立的。为简单起见，句法等同关系在下文中简写为SE关系。<br>###3.Query-Dependent Containment：基于查询的包含关系<br>在定义基于查询的包含关系之前，首先定义关于查询的邻居集合的概念：给定数据图$G$和$G$中顶点$v$，以及查询图$G_q$和$G_q$中顶点$u$，满足$L(v)=L_q(u)$，定义$v$的关于$u$的邻居集为如下集合：${v_i|v_i\in N(v),L(v_i)\in {L_q(u_i)|u_i\in N(u)}}$。记为$QDN(G_q,u,v)$。<br>直观上来讲，$v$的关于$u$的邻居集即为$v$的邻居中标签出现在$u$的邻居的标签中的顶点。以下图为例：<br><img src="http://static.zybuluo.com/shenyebao/ewl1npsgw5jiha68z8kzh29q/example1.jpg" alt="example1.jpg-233.5kB"><br>在查询图a和数据图c中，顶点$v_4$关于$u_1$的邻居集合为$QDN(G_q,u_1,v_4)={v<em>9,v</em>{11},v<em>{13},v</em>{14}}$，但是在查询图b中，顶点$v_4$关于$u<em>1$的邻居集合为$QDN(G</em>{q^{‘}},u_1,v_4)={v<em>9,v</em>{13},v<em>{14}}$，因为顶点$v</em>{11}$的标签D并没有出现在顶点$u_1$的邻居中。<br>在此基础上，我们定义基于查询的包含关系：给定查询图$G_q$和$G_q$中顶点$u$，数据图$G$中顶点$v_i$和$v_j$，我们说$v_i$关于顶点$u$包含$v_j$，当且仅当满足：$QDN(G_q,u,v_j)-{v_i}\subseteq QDN(G_q,u,v_i)-{v_j}$，记为$v<em>i\succeq</em>{(G_q,u)} v_j$。同句法包含关系一样，基于查询的包含关系也是满足传递性的。更重要的是，它与句法包含关系一样，在已知$v_j$可以匹配给$u$的情况下，我们可以立即得到$v_i$也可以匹配给$u$的结论。简单起见，基于查询的包含关系在下文中简写为QDC关系。<br>###4.Query-Dependent Equivalence:基于查询的等同关系<br>同样的，在基于查询的包含关系中将$\subseteq$改为$=$即可得到基于查询的等同关系的定义。我们把它记为$v<em>i\simeq</em>{(G_q,u)}v_j$。它同样满足上述包含关系的一些性质。这里再给出一个新的记号：假设$v<em>i\succeq</em>{(G_q,u)}v_j$但是不满足$v<em>i\simeq</em>{(G_q,u)}v_j$，我们就说$v_i$严格的关于$u$包含$v_j$，记为$v<em>i\succ</em>{(G_q,u)}v_j$。我们把基于查询的等同关系简写为QDE关系。<br>在给出这四种关系之后，我们来详细说明如何利用它们优化回溯算法。<br>###数据图的转化<br>在上文中我们已经知道，可以在数据图$G$的顶点集$V$上建立基于句法等同关系的等价类。对于$\forall v\in V$，我们记包含$v$的等价类（即所有与$v$满足句法包含关系的顶点的集合，包含$v$）为$SEC(v)$。我们可以得到如下结论：对于任意一个等价类中的顶点，它们或是两两不相邻，或是形成一个<em>团(clique)</em>的结构。证明很简单，考虑等价类中的任意三个顶点$v_i$,$v_j$和$v_k$，假设$v_i$和$v_j$相邻，根据句法包含的定义立即可以得到$v_j$和$v_k$相邻，同理，$v_k$和$v<em>i$也相邻，得证。这个结论意味着同一个等价类中的两个顶点或是相邻，或是2跳相邻（有公共邻居）。接下来我们给出转化图的概念：<br>给定数据图$G=(V,E,\sum,L)$，$G$的转化图，记为$G</em>{sh}=(V<em>{sh},E</em>{se},E<em>{sc},\sum</em>{sh},L_{sh})$，构造如下：</li>
+<li>对$C(u)$中的每个剩下的顶点$v$，对$u$能否匹配$v$进行最后一次判断:$isJoinable(f,v,G,G_q)$，如果可以，则将$(u,v)$加入$f$中，执行子过程$subgraphSearch(G_q,G,f)$。</li>
 </ol>
+<p>这里需要注意的是对于候选匹配集的进一步筛选的子过程$refineCandidate$，显然，这个筛选越彻底，筛掉的顶点越多，算法的效率就越高。从这个子过程的参数可以看到，这里的筛选基于当前的部分嵌入结果$f$。大部分基于回溯的算法的剪枝技巧就在这里体现了。例如经典的<em>VF2算法</em>根据$f$考虑<span>$G$</span><!-- Has MathJax -->中当前已匹配顶点的所有一跳邻居的集合$T$以及<span>$G_q$</span><!-- Has MathJax -->中当前已匹配顶点的所有一跳邻居集合$T_q$，算法指出$u$能够匹配$v$的一个必要条件是$u$在$T_q$中的邻居顶点数必然不大于$v$在$T$中的邻居顶点数，从而对$C(u)$进行进一步的筛选。<br>给出基于回溯的子图匹配算法的一般框架之后，文章讨论了对于该类算法的优化策略。主要提出了利用数据图中顶点的四类关系来实现优化。下面就详细介绍这四类关系。  </p>
+<h3 id="1-Syntactic-Containment：句法包含关系"><a href="#1-Syntactic-Containment：句法包含关系" class="headerlink" title="1.Syntactic Containment：句法包含关系"></a>1.Syntactic Containment：句法包含关系</h3><p>给定数据图<span>$G$</span><!-- Has MathJax -->，我们说图中顶点<span>$v_i$</span><!-- Has MathJax -->句法包含<span>$v_j$</span><!-- Has MathJax -->，当且仅当式子$N(v_j)-v_i\subseteq N(v_i)-v_j$成立。记为$v_i\succeq v_j$。直观上来讲，句法包含的意义就是邻居顶点的相互包含关系，当然，在两个顶点相邻时，为了仍然可以定义句法包含关系，我们需要将这两个顶点从对方的邻居顶点中除去。<br>很容易证明句法包含关系是满足传递性的，即我们有:$v_i\succeq v_j, v_j\succeq v_k \Rightarrow v_i\succeq v_k$。<br>句法包含关系的意义在于在已知$v_i\succeq v_j$的情况下，在任意的嵌入$f$中，如果<span>$v_j$</span><!-- Has MathJax -->被匹配给顶点$u$，而<span>$v_i$</span><!-- Has MathJax -->并没有被匹配为任何顶点，则我们可以将<span>$v_i$</span><!-- Has MathJax -->匹配给$u$而得到一个新的嵌入$f^{‘}$。换言之，如果<span>$v_j$</span><!-- Has MathJax -->能匹配给$u$，那么<span>$v_i$</span><!-- Has MathJax -->也必然能够匹配给$u$，再换言之，如果<span>$v_i$</span><!-- Has MathJax -->不能匹配给$u$，那么<span>$v_j$</span><!-- Has MathJax -->也必然不能匹配给$u$。在下文中，为简单起见，我们把句法包含关系简写为SC关系。句法包含关系就讲到这里。  </p>
+<h3 id="2-Syntactic-Equivalence-句法等同关系"><a href="#2-Syntactic-Equivalence-句法等同关系" class="headerlink" title="2.Syntactic Equivalence:句法等同关系"></a>2.Syntactic Equivalence:句法等同关系</h3><p>根据句法等同字面上的意思以及上文句法包含关系的定义，我们很容易可以得到句法等同关系的定义：同样的，它是定义在数据图<span>$G$</span><!-- Has MathJax -->上的二元关系，只要把上文中的$\subseteq$替换为$=$即可。我们把它记为$v_i\simeq v_j$。显然，句法等同关系是一种更为严格的句法包含关系，因而它必然满足上文所述的句法包含关系满足的一些特性。值得一提的是，句法等同关系同时满足自反、对称和传递性，是一种等价关系，因而可以在顶点集$V$上构造等价类。下文中的超图就是根据这一特性建立的。为简单起见，句法等同关系在下文中简写为SE关系。</p>
+<h3 id="3-Query-Dependent-Containment：基于查询的包含关系"><a href="#3-Query-Dependent-Containment：基于查询的包含关系" class="headerlink" title="3.Query-Dependent Containment：基于查询的包含关系"></a>3.Query-Dependent Containment：基于查询的包含关系</h3><p>在定义基于查询的包含关系之前，首先定义关于查询的邻居集合的概念：给定数据图<span>$G$</span><!-- Has MathJax -->和<span>$G$</span><!-- Has MathJax -->中顶点$v$，以及查询图<span>$G_q$</span><!-- Has MathJax -->和<span>$G_q$</span><!-- Has MathJax -->中顶点$u$，满足$L(v)=L_q(u)$，定义$v$的关于$u$的邻居集为如下集合：<span>$\{v_i|v_i\in N(v),L(v_i)\in \{L_q(u_i)|u_i\in N(u)\}\}$</span><!-- Has MathJax -->。记为$QDN(G_q,u,v)$。<br>直观上来讲，$v$的关于$u$的邻居集即为$v$的邻居中标签出现在$u$的邻居的标签中的顶点。以下图为例：<br><img src="http://static.zybuluo.com/shenyebao/ewl1npsgw5jiha68z8kzh29q/example1.jpg" alt="example1.jpg-233.5kB"><br>在查询图a和数据图c中，顶点$v_4$关于$u_1$的邻居集合为<span>$QDN(G_q,u_1,v_4)=\{v_9,v_{11},v_{13},v_{14}\}$</span><!-- Has MathJax -->，但是在查询图b中，顶点<span>$v_4$</span><!-- Has MathJax -->关于$u_1$的邻居集合为<span>$QDN(G_{q^{&apos;}},u_1,v_4)=\{v_9,v_{13},v_{14}\}$</span><!-- Has MathJax -->，因为顶点<span>$v_{11}$</span><!-- Has MathJax -->的标签D并没有出现在顶点$u_1$的邻居中。<br>在此基础上，我们定义基于查询的包含关系：给定查询图<span>$G_q$</span><!-- Has MathJax -->和<span>$G_q$</span><!-- Has MathJax -->中顶点$u$，数据图<span>$G$</span><!-- Has MathJax -->中顶点<span>$v_i$</span><!-- Has MathJax -->和<span>$v_j$</span><!-- Has MathJax -->，我们说<span>$v_i$</span><!-- Has MathJax -->关于顶点$u$包含<span>$v_j$</span><!-- Has MathJax -->，当且仅当满足：<span>$QDN(G_q,u,v_j)-\{v_i\}\subseteq QDN(G_q,u,v_i)-\{v_j\}$</span><!-- Has MathJax -->，记为<span>$v_i\succeq_{(G_q,u)} v_j$</span><!-- Has MathJax -->。同句法包含关系一样，基于查询的包含关系也是满足传递性的。更重要的是，它与句法包含关系一样，在已知<span>$v_j$</span><!-- Has MathJax -->可以匹配给$u$的情况下，我们可以立即得到<span>$v_i$</span><!-- Has MathJax -->也可以匹配给$u$的结论。简单起见，基于查询的包含关系在下文中简写为QDC关系。</p>
+<h3 id="4-Query-Dependent-Equivalence-基于查询的等同关系"><a href="#4-Query-Dependent-Equivalence-基于查询的等同关系" class="headerlink" title="4.Query-Dependent Equivalence:基于查询的等同关系"></a>4.Query-Dependent Equivalence:基于查询的等同关系</h3><p>同样的，在基于查询的包含关系中将$\subseteq$改为$=$即可得到基于查询的等同关系的定义。我们把它记为<span>$v_i\simeq_{(G_q,u)}v_j$</span><!-- Has MathJax -->。它同样满足上述包含关系的一些性质。这里再给出一个新的记号：假设<span>$v_i\succeq_{(G_q,u)}v_j$</span><!-- Has MathJax -->但是不满足<span>$v_i\simeq_{(G_q,u)}v_j$</span><!-- Has MathJax -->，我们就说<span>$v_i$</span><!-- Has MathJax -->严格的关于$u$包含<span>$v_j$</span><!-- Has MathJax -->，记为<span>$v_i\succ_{(G_q,u)}v_j$</span><!-- Has MathJax -->。我们把基于查询的等同关系简写为QDE关系。<br>在给出这四种关系之后，我们来详细说明如何利用它们优化回溯算法。</p>
+<h3 id="数据图的转化"><a href="#数据图的转化" class="headerlink" title="数据图的转化"></a>数据图的转化</h3><p>在上文中我们已经知道，可以在数据图<span>$G$</span><!-- Has MathJax -->的顶点集$V$上建立基于句法等同关系的等价类。对于<span>$\forall v\in V$</span><!-- Has MathJax -->，我们记包含$v$的等价类（即所有与$v$满足句法包含关系的顶点的集合，包含$v$）为<span>$SEC(v)$</span><!-- Has MathJax -->。我们可以得到如下结论：对于任意一个等价类中的顶点，它们或是两两不相邻，或是形成一个<em>团(clique)</em>的结构。证明很简单，考虑等价类中的任意三个顶点<span>$v_i$</span><!-- Has MathJax -->,<span>$v_j$</span><!-- Has MathJax -->和<span>$v_k$</span><!-- Has MathJax -->，假设<span>$v_i$</span><!-- Has MathJax -->和v<span>$_j$</span><!-- Has MathJax -->相邻，根据句法包含的定义立即可以得到<span>$v_j$</span><!-- Has MathJax -->和<span>$v_k$</span><!-- Has MathJax -->相邻，同理，<span>$v_k$</span><!-- Has MathJax -->和<span>$v_i$</span><!-- Has MathJax -->也相邻，得证。这个结论意味着同一个等价类中的两个顶点或是相邻，或是2跳相邻（有公共邻居）。接下来我们给出转化图的概念：<br>给定数据图$G=(V,E,\sum,L)$，<span>$G$</span><!-- Has MathJax -->的转化图，记为<span>$G_{sh}=(V_{sh},E_{se},E_{sc},\sum_{sh},L_{sh})$</span><!-- Has MathJax -->，构造如下：</p>
 <ul>
-<li>$V_{sh}={h|h=SEC(v),v\in V}$</li>
+<li><span>$V_{sh}=\{h|h=SEC(v),v\in V\}$</span><!-- Has MathJax --></li>
 <li>$E_{se}$是所有无向边的集合，满足$h$和$h^{‘}$之间存在一条边，当且仅当$(v_i,v_j)\in E,v_i\in h,v_j\in h^{‘}$</li>
 <li>$E_{sc}$是所有有向边的集合，满足从$h$到$h^{‘}$存在一条有向边当且仅当$v_i\succeq v_j,v_i\in h,v_j\in h^{‘}$</li>
 <li>$\sum_{sh}=\sum$</li>
 <li>$L_{sh}(h)=L(v),v\in h$</li>
 </ul>
-<p>在转化图上我们定义SC关系和SE关系：<br>$h\succeq h^{‘} \Leftrightarrow v_i\succeq v_j,v_i\in h, v_j\in h^{‘}$，称$h$为$h^{‘}$的SC双亲；<br>$h\simeq h^{‘} \Leftrightarrow v_i\simeq v_j,v_i\in h, v<em>j\in h^{‘}$;<br>同理，我们定义QDC和QDE关系：<br>$h\succeq</em>{(G_q.u)}h^{‘} \Leftrightarrow v<em>i\succeq</em>{(G_q.u)}v_j,v_i\in h, v<em>j\in h^{‘}$，称$h$为$h^{‘}$的QDC双亲；<br>$h\simeq</em>{(G_q.u)}h^{‘} \Leftrightarrow v<em>i\simeq</em>{(G_q.u)}v_j,v_i\in h, v<em>j\in<br>h^{‘}$;<br>构建转化图之后，我们可以尝试把原来的子图匹配问题放到转化后的图上解决，因为显然，转化图的规模大大小于原数据图的规模，我们将在下面证明这么做是可行的。但是首先，我们需要指出，在原图上进行匹配时，对于数据图中的每个顶点$v$，都只能匹配给查询图中的唯一顶点$u$,但在转化图上，这一点有所不同：由于转化图中的每个顶点$h$实际上包含了$|h|$个数据图中的顶点，因此它实际上最多可以匹配给查询图中的$|h|$个顶点，所以我们要在原来的算法框架上做一点改动，下文中会详细说明这一点。<br>接下来，我们证明对于转化图$G</em>{sh}$和查询图$G_q$做子图匹配是可行的。为此，我们需要证明对于$G$到$G<em>q$的任意一个匹配（嵌入）$f$，都可以通过$G</em>{sh}$到$G_q$的一个匹配（嵌入）$f_h$得到。证明很简单：已知$f$，我们构造$f_h$如下：对任意的$u\in V_q$，$f_h$把$u$映射为$SEC(f(u))$所表示的顶点即可，显然，这样得到的$f<em>h$是$G</em>{sh}$到$G_q$的一个匹配（嵌入）。<br>至此，所有的准备工作都已经完成了，下面我们来正式介绍优化的算法。</p>
-<p>###仅考虑SC和SE的优化<br>首先我们介绍利用上文所述的SC和SE关系的优化算法，这里暂时不考虑QDC和QDE关系。<br>如上文所述，在转化图上进行子图匹配与在原数据图上有所不同，此外，转化图仅仅利用了SE关系，并没有用到SC关系。基于这两点，我们需要对原来的回溯算法框架进行一些修改，具体如下：<br>1.修改$isJoinable$函数以允许多个查询图顶点映射到同一个转化图顶点中。主要过程是：对于转化图中的每个顶点，维护一个值$usedTimes$，表示该顶点已被匹配的次数。给定待匹配查询顶点$u$和转化图顶点$h$，对于每个查询图中已经被匹配的顶点$u_i$，考察$f(u_i)$的值，若$f(u_i)=f(u)$，则a)考察$u_i$和$u$是否相邻，若是，则$h$必然为一个团，否则返回false。b)考察$h.usedTimes$是否为$|h|$，若是，则表示该顶点已经被匹配了$|h|$次，无法继续匹配，返回false。<br>2.为了利用SC关系，在初始化$C(u)$时，我们只考虑把那些没有SC双亲（即不存在任何顶点句法包含该顶点）的顶点放入$C(u)$，在算法运行的过程中动态的修改$C(u)$。原因是我们知道，根据SC关系的性质，如果我们知道了顶点$h$无法被匹配给顶点$u$，那么对于任意满足$h\succeq h^{‘}$的顶点$h^{‘}$，都不可能不顶点$u$进行匹配。因此，我们首先忽略这些所有的顶点$h^{‘}$，只有在它们的所有SC双亲顶点被证实可以与$u$匹配时才将它们装载入$C(u)$。具体的做法是对每一个存在SC双亲的顶点，维护其未被匹配给顶点$u$的SC双亲的个数$ump$，在得知顶点$h$可以被匹配给顶点$u$时，对$h$的所有SC孩子顶点，修改其$ump$的值，若$h^{‘}.ump=0$，则将$h^{‘}$载入$C(u)$。<br>3.为了能够知道顶点$h$能否匹配给顶点$u$，我们需要给子程序$subgraphSearch$添加一个返回值，若返回true，则证明顶点$h$能否匹配给顶点$u$，反之则不能。<br>4.在得到所有的嵌入之后，我们需要把这些嵌入转化为原始数据图中的嵌入。这个工作很简单，只需要对于每个顶点$u\in V_q$，枚举其所有可能的映射顶点(即集合${v|v\in f(u)}$)就可以了。<br>综合上述四点，我们总结一下最终的算法流程：</p>
+<p>在转化图上我们定义SC关系和SE关系：<br><span>$h\succeq h^{&apos;} \Leftrightarrow v_i\succeq v_j,v_i\in h, v_j\in h^{&apos;}$</span><!-- Has MathJax -->，称$h$为$h^{‘}$的SC双亲；<br><span>$h\simeq h^{&apos;} \Leftrightarrow v_i\simeq v_j,v_i\in h, v_j\in h^{&apos;}$</span><!-- Has MathJax -->;<br>同理，我们定义QDC和QDE关系：<br><span>$h\succeq_{(G_q.u)}h^{&apos;} \Leftrightarrow v_i\succeq_{(G_q.u)}v_j,v_i\in h, v_j\in h^{&apos;}$</span><!-- Has MathJax -->，称$h$为$h^{‘}$的QDC双亲；<br><span>$h\simeq_{(G_q.u)}h^{&apos;} \Leftrightarrow v_i\simeq_{(G_q.u)}v_j,v_i\in h, v_j\in h^{&apos;}$</span><!-- Has MathJax -->;<br>构建转化图之后，我们可以尝试把原来的子图匹配问题放到转化后的图上解决，因为显然，转化图的规模大大小于原数据图的规模，我们将在下面证明这么做是可行的。但是首先，我们需要指出，在原图上进行匹配时，对于数据图中的每个顶点$v$，都只能匹配给查询图中的唯一顶点$u$,但在转化图上，这一点有所不同：由于转化图中的每个顶点$h$实际上包含了$|h|$个数据图中的顶点，因此它实际上最多可以匹配给查询图中的$|h|$个顶点，所以我们要在原来的算法框架上做一点改动，下文中会详细说明这一点。<br>接下来，我们证明对于转化图<span>$G_{sh}$</span><!-- Has MathJax -->和查询图<span>$G_q$</span><!-- Has MathJax -->做子图匹配是可行的。为此，我们需要证明对于<span>$G$</span><!-- Has MathJax -->到<span>$G_q$</span><!-- Has MathJax -->的任意一个匹配（嵌入）$f$，都可以通过<span>$G_{sh}$</span><!-- Has MathJax -->到<span>$G_q$</span><!-- Has MathJax -->的一个匹配（嵌入）$f_h$得到。证明很简单：已知$f$，我们构造$f_h$如下：对任意的$u\in V_q$，$f_h$把$u$映射为<span>$SEC(f(u))$</span><!-- Has MathJax -->所表示的顶点即可，显然，这样得到的$f_h$是<span>$G_{sh}$</span><!-- Has MathJax -->到<span>$G_q$</span><!-- Has MathJax -->的一个匹配（嵌入）。<br>至此，所有的准备工作都已经完成了，下面我们来正式介绍优化的算法。</p>
+<h3 id="仅考虑SC和SE的优化"><a href="#仅考虑SC和SE的优化" class="headerlink" title="仅考虑SC和SE的优化"></a>仅考虑SC和SE的优化</h3><p>首先我们介绍利用上文所述的SC和SE关系的优化算法，这里暂时不考虑QDC和QDE关系。<br>如上文所述，在转化图上进行子图匹配与在原数据图上有所不同，此外，转化图仅仅利用了SE关系，并没有用到SC关系。基于这两点，我们需要对原来的回溯算法框架进行一些修改，具体如下：<br>1.修改$isJoinable$函数以允许多个查询图顶点映射到同一个转化图顶点中。主要过程是：对于转化图中的每个顶点，维护一个值$usedTimes$，表示该顶点已被匹配的次数。给定待匹配查询顶点$u$和转化图顶点$h$，对于每个查询图中已经被匹配的顶点$u_i$，考察$f(u_i)$的值，若$f(u_i)=f(u)$，则a)考察<span>$u_i$</span><!-- Has MathJax -->和$u$是否相邻，若是，则$h$必然为一个团，否则返回$false$。b)考察$h.usedTimes$是否为$|h|$，若是，则表示该顶点已经被匹配了$|h|$次，无法继续匹配，返回$false$。<br>2.为了利用SC关系，在初始化$C(u)$时，我们只考虑把那些没有SC双亲（即不存在任何顶点句法包含该顶点）的顶点放入$C(u)$，在算法运行的过程中动态的修改$C(u)$。原因是我们知道，根据SC关系的性质，如果我们知道了顶点$h$无法被匹配给顶点$u$，那么对于任意满足$h\succeq h^{‘}$的顶点$h^{‘}$，都不可能不顶点$u$进行匹配。因此，我们首先忽略这些所有的顶点$h^{‘}$，只有在它们的所有SC双亲顶点被证实可以与$u$匹配时才将它们装载入$C(u)$。具体的做法是对每一个存在SC双亲的顶点，维护其未被匹配给顶点$u$的SC双亲的个数$ump$，在得知顶点$h$可以被匹配给顶点$u$时，对$h$的所有SC孩子顶点，修改其$ump$的值，若$h^{‘}.ump=0$，则将$h^{‘}$载入$C(u)$。<br>3.为了能够知道顶点$h$能否匹配给顶点$u$，我们需要给子程序$subgraphSearch$添加一个返回值，若返回true，则证明顶点$h$能否匹配给顶点$u$，反之则不能。<br>4.在得到所有的嵌入之后，我们需要把这些嵌入转化为原始数据图中的嵌入。这个工作很简单，只需要对于每个顶点$u\in V_q$，枚举其所有可能的映射顶点(即集合<span>$\{v|v\in f(u)\}$</span><!-- Has MathJax -->)就可以了。<br>综合上述四点，我们总结一下最终的算法流程：</p>
 <blockquote>
-<p>输入：转化图$G_{sh}$和查询图$G_q$，其中$V_q={u_1,u_2…u_n}$<br>输出：数据图$G$中$G_q$的所有嵌入<br>$f=\emptyset$；<br>$subgraphSearch(G<em>q,G</em>{sh},f)$；<br>设$flag$为$false$；<br>如果$|f|=|V_q|$，则调用子过程$finalEG(G<em>q,G</em>{sh},f)$，$dynamicCL(C(u_n),f(u_n))$，返回$true$；<br>否则，令$u$为下一个待匹配的顶点，对$C(u)$中的每一个顶点$h$，做如下动作：将$(u,h)$加入$f$并执行子程序$subgraphSearch(G<em>q,G</em>{sh},f)$，若返回$true$，则将$flag$置为$true$，最后将$(u,h)$从$f$中除去；<br>如果$flag$为$true$，令$u^{‘}$为$u$之前的匹配顶点，执行子程序$dynamicCL(C(u^{‘}),f(u^{‘}))$;<br>返回$flag$；</p>
+<p>输入：转化图<span>$G_{sh}$</span><!-- Has MathJax -->和查询图<span>$G_q$</span><!-- Has MathJax -->，其中$V_q={u_1,u_2…u_n}$<br>输出：数据图<span>$G$</span><!-- Has MathJax -->中<span>$G_q$</span><!-- Has MathJax -->的所有嵌入<br>$f=\emptyset$；<br><span>$subgraphSearch(G_q,G_{sh},f)$</span><!-- Has MathJax -->；<br>设$flag$为$false$；<br>如果$|f|=|V_q|$，则调用子过程<span>$finalEG(G_q,G_{sh},f)$</span><!-- Has MathJax -->，<span>$dynamicCL(C(u_n),f(u_n))$</span><!-- Has MathJax -->，返回$true$；<br>否则，令$u$为下一个待匹配的顶点，对$C(u)$中的每一个顶点$h$，做如下动作：将$(u,h)$加入$f$并执行子程序<span>$subgraphSearch(G_q,G_{sh},f)$</span><!-- Has MathJax -->，若返回$true$，则将$flag$置为$true$，最后将$(u,h)$从$f$中除去；<br>如果$flag$为$true$，令$u^{‘}$为$u$之前的匹配顶点，执行子程序$dynamicCL(C(u^{‘}),f(u^{‘}))$;<br>返回$flag$；</p>
 </blockquote>
-<p>这里子程序$finalEG(G<em>q,G</em>{sh},f)$即为将嵌入$f$转化为原数据图上嵌入的过程，子程序$dynamicCL$即为动态载入$C(u)$的过程。一旦存在一个$h$对$u$的匹配成功，即意味着$u^{‘}$可以与$f(u^{‘})$匹配，因此进行动态载入。</p>
-<p>###综合QDE,QDC的优化<br>上述算法仅仅考虑了利用SC和SE关系进行优化，这节我们加上了QDE和QDC关系，进一步对算法进行优化。考虑到QDE与SE，QDC与SC的相似性，我们很容易能够得到优化的思路。<br>首先，介绍需要用到的数据结构：DR表。对于查询图的每个顶点$u$，我们建立一张DR表，其结构如下图所示：<br><img src="http://static.zybuluo.com/shenyebao/awec41lxj0kqdnk49wzq8hms/example3.png" alt="example3.png-58.6kB"><br>对于$C(u)$中的每个顶点$h$，都建立一个类似的表项。<br>基于DR表，我们的优化思路如下：</p>
+<p>这里子程序<span>$finalEG(G_q,G_{sh},f)$</span><!-- Has MathJax -->即为将嵌入$f$转化为原数据图上嵌入的过程，子程序$dynamicCL$即为动态载入$C(u)$的过程。一旦存在一个$h$对$u$的匹配成功，即意味着$u^{‘}$可以与$f(u^{‘})$匹配，因此进行动态载入。</p>
+<h3 id="综合QDE-QDC的优化"><a href="#综合QDE-QDC的优化" class="headerlink" title="综合QDE,QDC的优化"></a>综合QDE,QDC的优化</h3><p>上述算法仅仅考虑了利用SC和SE关系进行优化，这节我们加上了QDE和QDC关系，进一步对算法进行优化。考虑到QDE与SE，QDC与SC的相似性，我们很容易能够得到优化的思路。<br>首先，介绍需要用到的数据结构：DR表。对于查询图的每个顶点$u$，我们建立一张DR表，其结构如下图所示：<br><img src="http://static.zybuluo.com/shenyebao/awec41lxj0kqdnk49wzq8hms/example3.png" alt="example3.png-58.6kB"><br>对于$C(u)$中的每个顶点$h$，都建立一个类似的表项。<br>基于DR表，我们的优化思路如下：</p>
 <ul>
 <li>在初始化$C(u)$时，我们进一步缩小范围，只把DR表中那些QDC双亲个数为0的顶点加入$C(u)$，原理同上节的第2点。</li>
 <li>在修改$isJoinable$子程序时，我们把考察的阈值由$|h|$改为$|h|+\sum_{h_i\in QDE-List(h)}|h_i|$，因为对于顶点$u$来说，$h$和与$h$满足QDE关系的顶点是等价的。</li>
 <li>在动态装载$C(u)$时，我们同样要考虑装载顶点的QDC孩子。具体来说，我们要考虑$h$的SC孩子，与$h$满足QDE关系的顶点的SC孩子，以及$h$的QDC孩子。</li>
-<li>在最后把嵌入转化为原始数据图中的嵌入时，我们在枚举时把$h$和它的QDE-List中的顶点放在一起枚举。<br>###总结<br>对于这篇论文的理解就写到这，不知道讲清楚没有，希望回头看的时候还能看懂吧。</li>
+<li>在最后把嵌入转化为原始数据图中的嵌入时，我们在枚举时把$h$和它的QDE-List中的顶点放在一起枚举。</li>
 </ul>
-
-          
-        
-      
-    </div>
-    
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/21/hello-world/" itemprop="url">
-                  Hello World
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-21T16:17:47+08:00" content="2016-04-21">
-              2016-04-21
-            </time>
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对于这篇论文的理解就写到这，不知道讲清楚没有，希望回头看的时候还能看懂吧。</p>
 
           
         
@@ -481,7 +393,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">1</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -489,12 +401,30 @@
           
 
           
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
 
         </nav>
 
         
 
         <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Shenyebao" target="_blank" title="github">
+                  
+                    <i class="fa fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
           
         </div>
 
@@ -606,7 +536,40 @@
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config("");
 </script>
@@ -625,19 +588,6 @@
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->
 
-
-
-  
-
-
-
-  
-
-
-
-  
-  
-  
 
   
 
