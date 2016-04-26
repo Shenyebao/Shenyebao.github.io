@@ -394,7 +394,8 @@
 <li>对任意的一条边$(u_i,u_j)\in E_q$，在<span>$G$</span><!-- Has MathJax -->中存在边$(f(u_i),f(u_j))\in E$。</li>
 </ol>
 <p>直观的来说，子图匹配的任务就是在数据图中找到所有的查询图子结构，因此，我们把$f$又叫做一个<em>嵌入(embedding)</em>。  </p>
-<h3 id="回溯算法的框架"><a href="#回溯算法的框架" class="headerlink" title="回溯算法的框架"></a>回溯算法的框架</h3><p>子图匹配的算法有很多，如上所述，这里我们研究的是一类具有代表性的算法，称之为基于<em>回溯(backtracking)</em>的算法。这里来了解一下回溯算法的基本框架：<br>首先给出文章中的伪代码：<br><img src="http://static.zybuluo.com/shenyebao/tw4rcboyq1l5jmkrmss8kgyl/example2.png" alt="example2.png-426.4kB"><br>解释一下主要的步骤：</p>
+<h3 id="回溯算法的框架"><a href="#回溯算法的框架" class="headerlink" title="回溯算法的框架"></a>回溯算法的框架</h3><p>子图匹配的算法有很多，如上所述，这里我们研究的是一类具有代表性的算法，称之为基于<em>回溯(backtracking)</em>的算法。这里来了解一下回溯算法的基本框架：<br>首先给出文章中的伪代码：</p>
+<p><div align="center"><br><img src="http://static.zybuluo.com/shenyebao/tw4rcboyq1l5jmkrmss8kgyl/example2.png" width="500" height="700" alt="图片名称" align="center"><br></div><br>解释一下主要的步骤：</p>
 <ol>
 <li>初始化嵌入$f$为空。</li>
 <li>对于查询图中的每个顶点$u$,建立其候选匹配集$C(u)\in V$。这里$C(u)$表示的是所有可能与$u$匹配的顶点集合，即存在$f$，满足$f(u)=v$的顶点$v$的集合。一个最简单的想法是可以把$C(u)$设为$V$中标签与$u$相同的顶点集合。如果存在一个$C(u)$为空，则算法结束，没有满足条件的匹配结果。</li>
