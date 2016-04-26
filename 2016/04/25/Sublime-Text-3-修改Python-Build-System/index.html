@@ -86,7 +86,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/04/25/Sublime-Text-3-修改Python-Build-System/index.html">
 <meta property="og:site_name" content="沈也保的Blog">
 <meta property="og:description" content="最近喜欢用Sublime Text码代码，体验相当不错。这个编辑器有两个流行的版本：Sublime Text 2和Sublime Text 3。我现在用的是Sublime Text 3。不过在配置python的build path时我发现了一个问题：在Sublime Text 3的package目录下并未找到build的配置文件。遂百度之，无果，最终在万能的StackOverFlow上找到答案，写">
-<meta property="og:updated_time" content="2016-04-25T13:33:21.000Z">
+<meta property="og:updated_time" content="2016-04-26T02:22:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Sublime Text 3 修改Python Build System">
 <meta name="twitter:description" content="最近喜欢用Sublime Text码代码，体验相当不错。这个编辑器有两个流行的版本：Sublime Text 2和Sublime Text 3。我现在用的是Sublime Text 3。不过在配置python的build path时我发现了一个问题：在Sublime Text 3的package目录下并未找到build的配置文件。遂百度之，无果，最终在万能的StackOverFlow上找到答案，写">
@@ -274,7 +274,7 @@
       
 
       
-        <p>最近喜欢用Sublime Text码代码，体验相当不错。这个编辑器有两个流行的版本：<a href="http://www.sublimetext.com/2" target="_blank" rel="external">Sublime Text 2</a>和<a href="http://www.sublimetext.com/3" target="_blank" rel="external">Sublime Text 3</a>。我现在用的是Sublime Text 3。不过在配置python的build path时我发现了一个问题：在Sublime Text 3的package目录下并未找到build的配置文件。遂百度之，无果，最终在万能的<a href="http://stackoverflow.com/questions/23789410/how-to-edit-sublime-text-build-settings" target="_blank" rel="external">StackOverFlow</a>上找到答案，写下来作为备忘：</p>
+        <p>最近喜欢用Sublime Text码代码，体验相当不错。这个编辑器有两个流行的版本：<a href="http://www.sublimetext.com/2" target="_blank" rel="external">Sublime Text 2</a>和<a href="http://www.sublimetext.com/3" target="_blank" rel="external">Sublime Text 3</a>。我现在用的是Sublime Text 3。不过在配置python的build path时我发现了一个问题：在Sublime Text 3的package目录下并未找到build的配置文件。遂百度之，无果，最终在万能的<a href="http://stackoverflow.com/questions/23789410/how-to-edit-sublime-text-build-settings" target="_blank" rel="external">StackOverFlow</a>上找到答案，写下来作为备忘：<a id="more"></a></p>
 <h3 id="Sublime-Text-2修改python-build-path"><a href="#Sublime-Text-2修改python-build-path" class="headerlink" title="Sublime Text 2修改python build path"></a>Sublime Text 2修改python build path</h3><p>这个比较简单，首先在终端下输入：<br>    <code>which python</code><br>找到python的安装目录，比如我这里是<br>    <code>/Users/louis/anaconda/bin/python</code><br>再打开Sublime Text 2，选择Preference-&gt;Browse Packages，进入package目录，找到名为Python.sublime-build的文件，打开后，修改内容如下：</p>
 <pre><code>{
 &quot;cmd&quot;: [&quot;python&quot;, &quot;-u&quot;, &quot;$file&quot;],
