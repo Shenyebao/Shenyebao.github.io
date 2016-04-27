@@ -318,17 +318,12 @@
 
       
         
-          
-            <p>算法来自<a href="http://www.sigmod.org/2013/" target="_blank" rel="external"><em>SIGMOD’2013</em></a>的文章：<em>TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases</em>。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。{!– more –}<br>定义什么的前面说过了这里就不再重复了。首先有必要介绍两个适用于任何子图匹配算法的剪枝策略：</p>
-<blockquote>
-<p>给定数据图$g$，查询图$q$，有：<br>对于<span>$\forall u\in q, v\in g$</span><!-- Has MathJax -->，$u$能够匹配$v$的必要条件是</p>
-<ol>
-<li><span>$deg_g(v)\ge deg_q(u)$</span><!-- Has MathJax -->。</li>
-<li>对于任意的标签$l$，<span>$|adj(v,l)|\ge |adj(u,l)|$</span><!-- Has MathJax -->。其中<span>$adj(v,l)$</span><!-- Has MathJax -->和<span>$adj(u,l)$</span><!-- Has MathJax -->分别表示$v$和$u$的邻居中标签为$l$的顶点集合。</li>
-</ol>
-</blockquote>
-
-          
+          <p>算法来自<a href="http://www.sigmod.org/2013/"><em>SIGMOD’2013</em></a>的文章：<em>TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases</em>。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/04/27/TurboIso/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
