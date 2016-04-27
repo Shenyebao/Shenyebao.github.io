@@ -80,16 +80,16 @@
 
 
 
-<meta name="description" content="算法来自SIGMOD’2013的文章：TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。">
+<meta name="description" content="算法来自SIGMOD’2013的文章：TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。{!– more –}定义什么的前面说过了这里就">
 <meta property="og:type" content="article">
 <meta property="og:title" content="子图匹配算法：TurboIso">
 <meta property="og:url" content="http://yoursite.com/2016/04/27/TurboIso/index.html">
 <meta property="og:site_name" content="沈也保的Blog">
-<meta property="og:description" content="算法来自SIGMOD’2013的文章：TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。">
-<meta property="og:updated_time" content="2016-04-27T12:58:49.000Z">
+<meta property="og:description" content="算法来自SIGMOD’2013的文章：TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。{!– more –}定义什么的前面说过了这里就">
+<meta property="og:updated_time" content="2016-04-27T13:07:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="子图匹配算法：TurboIso">
-<meta name="twitter:description" content="算法来自SIGMOD’2013的文章：TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。">
+<meta name="twitter:description" content="算法来自SIGMOD’2013的文章：TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。{!– more –}定义什么的前面说过了这里就">
 
 
 
@@ -313,11 +313,14 @@
       
 
       
-        <p>算法来自<a href="http://www.sigmod.org/2013/" target="_blank" rel="external"><em>SIGMOD’2013</em></a>的文章：<em>TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases</em>。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。<a id="more"></a><br>定义什么的前面说过了这里就不再重复了。首先有必要介绍两个适用于任何子图匹配算法的剪枝策略：<br>给定数据图$g$，查询图$q$，有：<br>对于&lt;% math %&gt;\forall u\in q, v\in g&lt;% endmath %&gt;，$u$能够匹配$v$的必要条件是</p>
+        <p>算法来自<a href="http://www.sigmod.org/2013/" target="_blank" rel="external"><em>SIGMOD’2013</em></a>的文章：<em>TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases</em>。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。{!– more –}<br>定义什么的前面说过了这里就不再重复了。首先有必要介绍两个适用于任何子图匹配算法的剪枝策略：</p>
+<blockquote>
+<p>给定数据图$g$，查询图$q$，有：<br>对于<span>$\forall u\in q, v\in g$</span><!-- Has MathJax -->，$u$能够匹配$v$的必要条件是</p>
 <ol>
-<li>&lt;% math %&gt;deg_g(v)\ge deg_q(u)&lt;% endmath %&gt;。</li>
-<li>对于任意的标签$l$，&lt;% math %&gt;|adj(v,l)|\ge |adj(u,l)|&lt;% endmath %&gt;。其中&lt;% math %&gt;adj(v,l)&lt;% endmath %&gt;和&lt;% math %&gt;adj(u,l)&lt;% endmath %&gt;分别表示$v$和$u$的邻居中标签为$l$的顶点集合。</li>
+<li><span>$deg_g(v)\ge deg_q(u)$</span><!-- Has MathJax -->。</li>
+<li>对于任意的标签$l$，<span>$|adj(v,l)|\ge |adj(u,l)|$</span><!-- Has MathJax -->。其中<span>$adj(v,l)$</span><!-- Has MathJax -->和<span>$adj(u,l)$</span><!-- Has MathJax -->分别表示$v$和$u$的邻居中标签为$l$的顶点集合。</li>
 </ol>
+</blockquote>
 
       
     </div>
