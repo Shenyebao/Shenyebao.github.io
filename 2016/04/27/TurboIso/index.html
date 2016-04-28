@@ -86,7 +86,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/04/27/TurboIso/index.html">
 <meta property="og:site_name" content="沈也保的Blog">
 <meta property="og:description" content="算法来自SIGMOD’2013的文章：TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。">
-<meta property="og:updated_time" content="2016-04-27T13:41:57.000Z">
+<meta property="og:updated_time" content="2016-04-28T08:53:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="子图匹配算法：TurboIso">
 <meta name="twitter:description" content="算法来自SIGMOD’2013的文章：TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。">
@@ -322,7 +322,7 @@
 </ol>
 </blockquote>
 <p>这两个剪枝策略被普遍利用于各类子图匹配算法中，等会我们还会用到它们。</p>
-<h3 id="查询图上的等价关系"><a href="#查询图上的等价关系" class="headerlink" title="查询图上的等价关系"></a>查询图上的等价关系</h3><p>还记得我前几天在<a href="http://www.shenyebao.com/2016/04/21/BoostIso/" target="_blank" rel="external">另一篇博文</a>里介绍了BoostIso算法中定义的数据图上的等价关系，这里又定义了查询图上的等价关系：Neighborhood Equivalence，简写为NE关系。类似的，查询图上的等价关系定义在顶点集$V_q$上：顶点<span>$u_i$</span><!-- Has MathJax -->和<span>$u_j$</span><!-- Has MathJax -->满足NE关系，当前且仅当对任意的满足条件的匹配$f$（注意对于查询图中的每一个顶点，都必须包含在匹配$f$中，这一点是与数据图不同的），假设顶点<span>$u_i$</span><!-- Has MathJax -->和<span>$u_j$</span><!-- Has MathJax -->分别匹配给顶点<span>$v_i$</span><!-- Has MathJax -->和<span>$v_j$</span><!-- Has MathJax -->，则<span>$f-\{(u_i,v_i),(u_j,v_j)\}\cup \{(u_i,v_j),(u_j,v_i)\}$</span><!-- Has MathJax -->也是一个满足条件的匹配。<br>NE关系定义了数据图顶点之间匹配的等价性。</p>
+<h3 id="查询图上的等价关系"><a href="#查询图上的等价关系" class="headerlink" title="查询图上的等价关系"></a>查询图上的等价关系</h3><p>还记得我前几天在<a href="http://www.shenyebao.com/2016/04/21/BoostIso/" target="_blank" rel="external">另一篇博文</a>里介绍了BoostIso算法中定义的数据图上的等价关系，这里又定义了查询图上的等价关系：Neighborhood Equivalence，简写为NE关系。类似的，查询图上的等价关系定义在顶点集$V_q$上：顶点<span>$u_i$</span><!-- Has MathJax -->和<span>$u_j$</span><!-- Has MathJax -->满足NE关系，当前且仅当对任意的满足条件的匹配$f$（注意对于查询图中的每一个顶点，都必须包含在匹配$f$中，这一点是与数据图不同的），假设顶点<span>$u_i$</span><!-- Has MathJax -->和<span>$u_j$</span><!-- Has MathJax -->分别匹配给顶点<span>$v_i$</span><!-- Has MathJax -->和<span>$v_j$</span><!-- Has MathJax -->，则<span>$f-\{(u_i,v_i),(u_j,v_j)\}\cup \{(u_i,v_j),(u_j,v_i)\}$</span><!-- Has MathJax -->也是一个满足条件的匹配。<br>NE关系定义了数据图顶点之间匹配的等价性。显然，任意若干个相互等价的顶点必然有共同的邻居集合，或者两两相邻（构成一个团的结构），并且拥有相同的非该团的邻居集合。以下图为例：<br></p>
 
       
     </div>
