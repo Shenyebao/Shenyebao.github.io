@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="沈也保的Blog">
 <meta property="og:description" content="算法来自SIGMOD’2013的文章：TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。">
 <meta property="og:image" content="http://static.zybuluo.com/shenyebao/v98xafwdmtn5ngfo60q2sde6/example1.png">
-<meta property="og:updated_time" content="2016-05-04T12:15:34.000Z">
+<meta property="og:updated_time" content="2016-05-04T12:22:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="子图匹配算法：TurboIso">
 <meta name="twitter:description" content="算法来自SIGMOD’2013的文章：TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。">
@@ -335,7 +335,7 @@
 <p>将$G_i$中的所有顶点再次按照其邻居顶点结合分组，同组内的顶点的邻居集合相同。若每个组内的顶点个数都大于1，则将每个组组织为一个新的顶点作为<span>$u^\{&apos;\}$</span><!-- Has MathJax -->的子节点，否则考察那些单独成组的顶点，是否满足等价关系，将那些两两满足等价关系的顶点组织成一个新的顶点作为<span>$u^\{&apos;\}$</span><!-- Has MathJax -->的子节点。</p>
 </blockquote>
 </li>
-<li><p>将上述得到的所有顶点作为<span>$u^\{&apos;\}$</span><!-- Has MathJax -->的子节点，参与下阶段的搜索。</p>
+<li><p>将上述得到的所有顶点作为<span>$u^\{&apos;\}$</span><!-- Has MathJax -->的子节点，参与下阶段的搜索过程。</p>
 </li>
 </ol>
 
