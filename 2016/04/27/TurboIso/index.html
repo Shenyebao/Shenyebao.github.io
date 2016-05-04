@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="沈也保的Blog">
 <meta property="og:description" content="算法来自SIGMOD’2013的文章：TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。">
 <meta property="og:image" content="http://static.zybuluo.com/shenyebao/v98xafwdmtn5ngfo60q2sde6/example1.png">
-<meta property="og:updated_time" content="2016-05-04T12:25:37.000Z">
+<meta property="og:updated_time" content="2016-05-04T12:26:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="子图匹配算法：TurboIso">
 <meta name="twitter:description" content="算法来自SIGMOD’2013的文章：TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。">
@@ -328,7 +328,7 @@
 <p><div align="center"><br><img src="http://static.zybuluo.com/shenyebao/v98xafwdmtn5ngfo60q2sde6/example1.png" width="600" height="300" alt="图片名称" align="center"><br></div></p>
 <h3 id="查询图的转化"><a href="#查询图的转化" class="headerlink" title="查询图的转化"></a>查询图的转化</h3><p>基于上述的等价关系，算法首先对于查询图进行转化，类似的，将同一个等价类中的顶点组织为一个新的顶点。但是新的查询图并不保存原图中的所有边，而是形成一个树的结构。具体的做法是选择一个起始顶点<span>$u_s$</span><!-- Has MathJax -->开始进行广度优先遍历。由于NE关系的特点，容易知道处于同一等价类中的顶点会在搜索过程的同一阶段中被访问到（因为它们与起始顶点的最短路径长度相同。）对于搜索过程中的每个顶点的处理过程如下：</p>
 <ol>
-<li>首先将<span>$u_s$</span><!-- Has MathJax -->组织为一个搜索树的根节点<span>$(u_s)^{&apos;}$</span><!-- Has MathJax -->。</li>
+<li>首先将<span>$u_s$</span><!-- Has MathJax -->组织为一个搜索树的根节点<span>$u_s^{&apos;}$</span><!-- Has MathJax -->。</li>
 <li>对于搜索过程中的任意一个顶点<span>$u^{&apos;}$</span><!-- Has MathJax -->，假设其对应的等价类表示为<span>$u^{&apos;}.NEC$</span><!-- Has MathJax -->，首先计算<span>$u^{&apos;}.NEC$</span><!-- Has MathJax -->中所有顶点的邻居顶点的交$G$，<span>$u^{&apos;}$</span><!-- Has MathJax -->的子节点只能在其中产生。</li>
 <li>将$G$中的顶点按照标签分组，对于每个组$G_i$，再按照如下方式将其组织成若干个<span>$u^{&apos;}$</span><!-- Has MathJax -->的子节点：</li>
 </ol>
