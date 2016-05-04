@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="沈也保的Blog">
 <meta property="og:description" content="算法来自SIGMOD’2013的文章：TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。">
 <meta property="og:image" content="http://static.zybuluo.com/shenyebao/v98xafwdmtn5ngfo60q2sde6/example1.png">
-<meta property="og:updated_time" content="2016-05-03T04:21:18.000Z">
+<meta property="og:updated_time" content="2016-05-04T12:15:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="子图匹配算法：TurboIso">
 <meta name="twitter:description" content="算法来自SIGMOD’2013的文章：TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。">
@@ -326,7 +326,18 @@
 <p>这两个剪枝策略被普遍利用于各类子图匹配算法中，第二个剪枝策略被称为<strong>NLF Filter</strong>，等会我们还会用到它们。</p>
 <h3 id="查询图上的等价关系"><a href="#查询图上的等价关系" class="headerlink" title="查询图上的等价关系"></a>查询图上的等价关系</h3><p>还记得我前几天在<a href="http://www.shenyebao.com/2016/04/21/BoostIso/" target="_blank" rel="external">另一篇博文</a>里介绍了BoostIso算法中定义的数据图上的等价关系，这里又定义了查询图上的等价关系：Neighborhood Equivalence，简写为NE关系。类似的，查询图上的等价关系定义在顶点集$V_q$上：顶点<span>$u_i$</span><!-- Has MathJax -->和<span>$u_j$</span><!-- Has MathJax -->满足NE关系，当前且仅当对任意的满足条件的匹配$f$（注意对于查询图中的每一个顶点，都必须包含在匹配$f$中，这一点是与数据图不同的），假设顶点<span>$u_i$</span><!-- Has MathJax -->和<span>$u_j$</span><!-- Has MathJax -->分别匹配给顶点<span>$v_i$</span><!-- Has MathJax -->和<span>$v_j$</span><!-- Has MathJax -->，则<span>$f-\{(u_i,v_i),(u_j,v_j)\}\cup \{(u_i,v_j),(u_j,v_i)\}$</span><!-- Has MathJax -->也是一个满足条件的匹配。<br>NE关系定义了数据图顶点之间匹配的等价性。显然，任意若干个相互等价的顶点必然有共同的邻居集合，或者两两相邻（构成一个团的结构），并且拥有相同的非该团的邻居集合。下面的两个图中的顶点A，B，和C对应了上述的两种等价关系。</p>
 <p><div align="center"><br><img src="http://static.zybuluo.com/shenyebao/v98xafwdmtn5ngfo60q2sde6/example1.png" width="600" height="300" alt="图片名称" align="center"><br></div></p>
-<h3 id="查询图的转化"><a href="#查询图的转化" class="headerlink" title="查询图的转化"></a>查询图的转化</h3><p>基于上述的等价关系，算法首先对于查询图进行转化，类似的，将同一个等价类中的顶点组织为一个新的顶点。但是新的查询图并不保存原图中的所有边，而是形成一个树的结构。具体的做法是选择一个起始顶点$u_s$开始进行广度优先遍历，</p>
+<h3 id="查询图的转化"><a href="#查询图的转化" class="headerlink" title="查询图的转化"></a>查询图的转化</h3><p>基于上述的等价关系，算法首先对于查询图进行转化，类似的，将同一个等价类中的顶点组织为一个新的顶点。但是新的查询图并不保存原图中的所有边，而是形成一个树的结构。具体的做法是选择一个起始顶点<span>$u_s$</span><!-- Has MathJax -->开始进行广度优先遍历。由于NE关系的特点，容易知道处于同一等价类中的顶点会在搜索过程的同一阶段中被访问到（因为它们与起始顶点的最短路径长度相同。）对于搜索过程中的每个顶点的处理过程如下：</p>
+<ol>
+<li>首先将<span>$u_s$</span><!-- Has MathJax -->组织为一个搜索树的根节点<span>$(u_s)^\{&apos;\}$</span><!-- Has MathJax -->。</li>
+<li>对于搜索过程中的任意一个顶点<span>$u^\{&apos;\}$</span><!-- Has MathJax -->，假设其对应的等价类表示为<span>$u^\{&apos;\}.NEC$</span><!-- Has MathJax -->，首先计算<span>$u^\{&apos;\}.NEC$</span><!-- Has MathJax -->中所有顶点的邻居顶点的交$G$，<span>$u^\{&apos;\}$</span><!-- Has MathJax -->的子节点只能在其中产生。</li>
+<li><p>将$G$中的顶点按照标签分组，对于每个组$G_i$，再按照如下方式将其组织成若干个<span>$u^\{&apos;\}$</span><!-- Has MathJax -->的子节点：</p>
+<blockquote>
+<p>将$G_i$中的所有顶点再次按照其邻居顶点结合分组，同组内的顶点的邻居集合相同。若每个组内的顶点个数都大于1，则将每个组组织为一个新的顶点作为<span>$u^\{&apos;\}$</span><!-- Has MathJax -->的子节点，否则考察那些单独成组的顶点，是否满足等价关系，将那些两两满足等价关系的顶点组织成一个新的顶点作为<span>$u^\{&apos;\}$</span><!-- Has MathJax -->的子节点。</p>
+</blockquote>
+</li>
+<li><p>将上述得到的所有顶点作为<span>$u^\{&apos;\}$</span><!-- Has MathJax -->的子节点，参与下阶段的搜索。</p>
+</li>
+</ol>
 
       
     </div>
