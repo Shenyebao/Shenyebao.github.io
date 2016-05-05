@@ -88,7 +88,7 @@
 <meta property="og:description" content="算法来自SIGMOD’2013的文章：TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。">
 <meta property="og:image" content="http://static.zybuluo.com/shenyebao/v98xafwdmtn5ngfo60q2sde6/example1.png">
 <meta property="og:image" content="http://static.zybuluo.com/shenyebao/0fgeixxiwcv10ya1zo8vq33k/example2.png">
-<meta property="og:updated_time" content="2016-05-04T12:47:56.000Z">
+<meta property="og:updated_time" content="2016-05-05T02:12:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="子图匹配算法：TurboIso">
 <meta name="twitter:description" content="算法来自SIGMOD’2013的文章：TurboISO: Towards UltraFast and Robust Subgraph Isomorphism Search in Large Graph Databases。从时间上来讲，这个算法的提出要比BoostIso早，但是它比BoostIso复杂很多，而且文章叙述的也很不清楚，所以放到后面来写。">
@@ -341,7 +341,7 @@
 </ul>
 <p>这里需要解释的是第二步，为何顶点<span>$u^{&apos;}$</span><!-- Has MathJax -->的子节点只能在$G$中产生？原因很简单，<span>$u^{&apos;}$</span><!-- Has MathJax -->的子节点必然与其相邻，由等价类的定义可得，一个等价类内的任意顶点与另一等价类内的一个顶点相邻<span>$\Rightarrow$</span><!-- Has MathJax -->这两个等价类内的任意两个顶点都相邻。因此<span>$u^{&apos;}$</span><!-- Has MathJax -->的子节点只能在<span>$u^{&apos;}$</span><!-- Has MathJax -->的等价类内所有顶点的共同邻居中得到。这一过程的伪代码如下图所示：</p>
 <p><div align="center"><br><img src="http://static.zybuluo.com/shenyebao/0fgeixxiwcv10ya1zo8vq33k/example2.png" width="600" height="500" alt="图片名称" align="center"><br></div></p>
-<h3 id="候选区域搜索"><a href="#候选区域搜索" class="headerlink" title="候选区域搜索"></a>候选区域搜索</h3><p>得到的转化</p>
+<h3 id="候选区域搜索"><a href="#候选区域搜索" class="headerlink" title="候选区域搜索"></a>候选区域搜索</h3><p>在上一步中得到的转化后的树结构，称之为NEC树。</p>
 
       
     </div>
